@@ -34,7 +34,7 @@ module.exports = {
     contracts: {
       SimpleStorage: {
         fromIndex: 0,
-        args: [100]
+        args: []
       }
     }
   }

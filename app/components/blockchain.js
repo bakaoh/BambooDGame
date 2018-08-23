@@ -9,75 +9,94 @@ class Blockchain extends React.Component {
       super(props);
   
       this.state = {
-        valueSet: 10,
-        valueGet: "",
+        number: 0,
+        address: "",
         logs: []
       }
     }
-  
-    handleChange(e){
-      this.setState({valueSet: e.target.value});
+
+    componentDidMount(){
+      EmbarkJS.onReady(() => {
+        this.setState({address: web3.eth.defaultAccount})
+        this.getInfo();
+      });
     }
-  
-    setValue(e){
-      e.preventDefault();
-  
-      var value = parseInt(this.state.valueSet, 10);
-  
-      // If web3.js 1.0 is being used
-      if (EmbarkJS.isNewWeb3()) {
-        SimpleStorage.methods.set(value).send({from: web3.eth.defaultAccount});
-        this._addToLog("SimpleStorage.methods.set(value).send({from: web3.eth.defaultAccount})");
-      } else {
-        SimpleStorage.set(value);
-        this._addToLog("#blockchain", "SimpleStorage.set(" + value + ")");
+
+    checkin(){
+      SimpleStorage.methods.checkin().send({from: web3.eth.defaultAccount});
+    }
+
+    getInfo() {
+      SimpleStorage.methods.playerInfo(this.state.address).call()
+      .then(_value => {
+        this.setState({logs: [
+          "SimpleStorage.methods.playerInfo()",
+          "Account: " + this.state.address,
+          "Join: " + _value.joined,
+          "Knot: " + _value.knot,
+          "Left: " + _value.left,
+          "Right: " + _value.right,
+          "Len: " + _value.len
+        ]});
+      })
+    }
+
+    addAttendees() {
+      let addrs = [];
+      for (let i = 0; i < 50; i++) {
+        addrs.push(web3.eth.accounts.create().address);
       }
+      this.setState({logs: addrs});
+      SimpleStorage.methods.addDummy(addrs).send({from: web3.eth.defaultAccount});
     }
   
-    getValue(e){
-      e.preventDefault();
-      
-      if (EmbarkJS.isNewWeb3()) {
-        SimpleStorage.methods.get().call()
-          .then(_value => this.setState({valueGet: _value}))
-        this._addToLog("SimpleStorage.methods.get(console.log)");
-      } else {
-        SimpleStorage.get()
-          .then(_value => this.setState({valueGet: _value}));
-        this._addToLog("SimpleStorage.get()");
-      }
+    handleNumberChange(e){
+      this.setState({number: e.target.value});
     }
   
-    _addToLog(txt){
-      this.state.logs.push(txt);
-      this.setState({logs: this.state.logs});
+    handleAddressChange(e){
+      this.setState({address: e.target.value});
     }
   
+    knotsByNum(){
+      var value = parseInt(this.state.number, 0);
+      SimpleStorage.methods.knotsByNum(value).call()
+        .then(_value => {
+          this.setState({logs: _value});
+        })
+    }
+
     render(){
       return (<React.Fragment>
-          <h3> 1. Set the value in the blockchain</h3>
+          <h3> 1. Info</h3>
           <Form inline>
             <FormGroup>
               <FormControl
                 type="text"
-                defaultValue={this.state.valueSet}
-                onChange={(e) => this.handleChange(e)} />
-              <Button bsStyle="primary" onClick={(e) => this.setValue(e)}>Set Value</Button>
-              <HelpBlock>Once you set the value, the transaction will need to be mined and then the value will be updated on the blockchain.</HelpBlock>
+                defaultValue={this.state.address}
+                onChange={(e) => this.handleAddressChange(e)} />
+              <Button bsStyle="primary" onClick={() => this.getInfo()}>Get Info</Button>
+            </FormGroup>
+            <FormGroup>
+              <FormControl
+                type="text"
+                defaultValue={this.state.number}
+                onChange={(e) => this.handleNumberChange(e)} />
+              <Button bsStyle="primary" onClick={() => this.knotsByNum()}>Get Knots</Button>
             </FormGroup>
           </Form>
-          
-          <h3> 2. Get the current value</h3>
+
+          <h3> 2. Action</h3>
           <Form inline>
             <FormGroup>
-              <HelpBlock>current value is <span className="value">{this.state.valueGet}</span></HelpBlock>
-              <Button bsStyle="primary" onClick={(e) => this.getValue(e)}>Get Value</Button>
-              <HelpBlock>Click the button to get the current value. The initial value is 100.</HelpBlock>
+              <Button bsStyle="primary" onClick={() => this.checkin()}>Join</Button>
+            </FormGroup>
+            <FormGroup>
+              <Button bsStyle="primary" onClick={() => this.addAttendees()}>Add 50 attendees</Button><br/>
             </FormGroup>
           </Form>
           
-          <h3> 3. Contract Calls </h3>
-          <p>Javascript calls being made: </p>
+          <h3> Logs </h3>
           <div className="logs">
           {
             this.state.logs.map((item, i) => <p key={i}>{item}</p>)
