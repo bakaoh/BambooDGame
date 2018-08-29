@@ -6,16 +6,9 @@ import Avatar from '@material-ui/core/Avatar';
 import blockies from 'blockies-identicon/blockies';
 
 const styles = {
-  row: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  avatar: {
-    margin: 10,
-  },
   bigAvatar: {
-    width: 60,
-    height: 60,
+    width: 64,
+    height: 64,
   },
 };
 
@@ -33,14 +26,14 @@ class Blockies extends React.Component {
   }
 
   _createUrl(address) {
-    return blockies.create({ seed:address, size: 24, scale: 3 }).toDataURL();
+    return blockies.create({ seed:address, size: 15, scale: 3 }).toDataURL();
   }
 
   render(){
     return (<Avatar
       alt={this.state.address}
       src={this.state.url}
-      className={classNames(this.props.classes.avatar, this.props.classes.bigAvatar)}
+      className={this.props.big ? this.props.classes.bigAvatar : null}
     />);
   }
 }

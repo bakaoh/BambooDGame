@@ -34,14 +34,6 @@ Current implementation there till is game master role to setup the game, but som
 
     Prize distribution is currently not built-in.
 
-## Variant
-
-- This game may be held as a pre-event at hackathon to form random teams. We need to change the `knotNumber` function to equally generation.
-
-- We may disallow breaking joints to make the game more friendly (no traitor, no plot).
-
-- We may require enter fee and distribute that for the winners. That make the game more like stake game.
-
 ## Installation
 
 ```bash
@@ -54,4 +46,10 @@ Go to `http://localhost:8000/`
 
 ## Misc
 
-The name comes from a Vietnamese fable, [The Hundred-knot Bamboo Tree](https://en.wikipedia.org/wiki/The_Hundred-knot_Bamboo_Tree)
+- This game may be held as a pre-event at hackathon to form random teams. We need to change the `knotNumber` function to equally generation.
+
+- We may disallow breaking joints to make the game more friendly (no traitor, no plot).
+
+- We may require enter fee and distribute that for the winners. That make the game more like stake game.
+
+- The name comes from a Vietnamese fable, [The Hundred-knot Bamboo Tree](https://en.wikipedia.org/wiki/The_Hundred-knot_Bamboo_Tree)

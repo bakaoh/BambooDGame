@@ -1,7 +1,6 @@
 import EmbarkJS from 'Embark/EmbarkJS';
 import SimpleStorage from 'Embark/contracts/SimpleStorage';
 import React from 'react';
-import Blockies from './blockies';
 import { Form, FormGroup, FormControl, HelpBlock, Button, Col } from 'react-bootstrap';
  
 class Blockchain extends React.Component {
@@ -61,7 +60,7 @@ class Blockchain extends React.Component {
   
     knotsByNum(){
       var value = parseInt(this.state.number, 0);
-      SimpleStorage.methods.knotsByNum(value).call()
+      SimpleStorage.methods.knotsByNumber(value).call()
         .then(_value => {
           this.setState({logs: _value});
         })
@@ -69,9 +68,6 @@ class Blockchain extends React.Component {
 
     render(){
       return (<React.Fragment>
-          <Col xs={6} md={4}>
-            <Blockies address={this.state.address} />
-          </Col>
           <h3> 1. Info</h3>
           <Form inline>
             <FormGroup>
