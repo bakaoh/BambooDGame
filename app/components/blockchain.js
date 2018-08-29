@@ -1,7 +1,8 @@
 import EmbarkJS from 'Embark/EmbarkJS';
 import SimpleStorage from 'Embark/contracts/SimpleStorage';
 import React from 'react';
-import { Form, FormGroup, FormControl, HelpBlock, Button } from 'react-bootstrap';
+import Blockies from './blockies';
+import { Form, FormGroup, FormControl, HelpBlock, Button, Col } from 'react-bootstrap';
  
 class Blockchain extends React.Component {
 
@@ -36,7 +37,7 @@ class Blockchain extends React.Component {
           "Knot: " + _value.knot,
           "Left: " + _value.left,
           "Right: " + _value.right,
-          "Len: " + _value.len
+          "Len: " + _value.length
         ]});
       })
     }
@@ -68,6 +69,9 @@ class Blockchain extends React.Component {
 
     render(){
       return (<React.Fragment>
+          <Col xs={6} md={4}>
+            <Blockies address={this.state.address} />
+          </Col>
           <h3> 1. Info</h3>
           <Form inline>
             <FormGroup>

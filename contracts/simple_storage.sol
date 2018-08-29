@@ -6,11 +6,12 @@ contract SimpleStorage {
     uint constant public MAX_LEN = 16;    
     mapping(address => address) private prev;
     mapping(address => address) private next;
+    mapping(address => uint) private ts;
     mapping(uint => address[]) private knots;
     
     address private gm;
     bool private ended;
-    uint private ts;
+    uint private jointCount;
     
     constructor() public {
         gm = msg.sender;
@@ -53,23 +54,26 @@ contract SimpleStorage {
         require(isPlayer(_to), "Must connect to a joined address");
         if (knotNumber(msg.sender) == knotNumber(_to) + 1) {
             prev[msg.sender] = _to;
+            ts[msg.sender] = jointCount++;
             return true;
         }
         if (knotNumber(msg.sender) == knotNumber(_to) - 1) {
             next[msg.sender] = _to;
+            ts[msg.sender] = jointCount++;
             return true;
         }
         return false;
     }
 
     // get info functions
-    function playerInfo(address _addr) public view returns (bool joined, uint knot, address left, address right, uint len) {
+    function playerInfo(address _addr) public view returns (bool joined, uint knot, address left, address right, uint length) {
         joined = isPlayer(_addr);
         if (!joined) return;
         knot = knotNumber(_addr);
         left = prev[_addr] != gm ? prev[_addr] : 0;
         right = next[_addr];
-        len = bambooLen(_addr);
+        (length, ) = bambooLength(_addr);
+        return;
     }
 
     function isPlayer(address _addr) public view returns (bool) {
@@ -81,35 +85,47 @@ contract SimpleStorage {
         return (uint(b[2]) * 256 + uint(b[6])) % MAX_LEN;
     }
 
-    function bambooLen(address _addr) public view returns (uint) {
-        uint rs = 1;
+    function bambooLength(address _addr) public view returns (uint length, uint maxTs) {
+        length = 1;
         address cur = _addr;
+        maxTs = ts[cur];
         while (next[prev[cur]] == cur) {
             cur = prev[cur];
-            rs++;
+            if (maxTs < ts[cur]) maxTs = ts[cur];
+            length++;
         }
         cur = _addr;
         while (prev[next[cur]] == cur) {
             cur = next[cur];
-            rs++;
+            if (maxTs < ts[cur]) maxTs = ts[cur];
+            length++;
         }
-        return rs;
+        return;
     }
 
     // supported function
-    function knotsByNum(uint _num) public view returns (address[]) {
+    function knotsByNumber(uint _num) public view returns (address[]) {
         return knots[_num];
     }
 
-    // function getBestSpan() public view returns (uint) {
-    //     uint maxLen;
-    //     address winnerSpan;
-    //     for (uint i = 0; i < attendees.length; i++) {
-    //         if (prev[attendees[i]] == 0) {
-    //             uint len = getSpanLen(attendees[i]);
-    //         }
-    //     }
-    // }
-
-
+    function winner() public view returns (address) {
+        uint winnerLength = 0;
+        uint winnerMaxTs = 0;
+        address winnerLeftMost;
+        for (uint i = 0; i < MAX_LEN; i++) {
+            for (uint j = 0; j < knots[i].length; j++) {
+                if (prev[knots[i][j]] == gm || next[prev[knots[i][j]]] != knots[i][j]) {
+                    uint length;
+                    uint maxTs;
+                    (length, maxTs) = bambooLength(knots[i][j]);
+                    if (length > winnerLength || (length == winnerLength && maxTs < winnerMaxTs)) {
+                        winnerLength = length;
+                        winnerMaxTs = maxTs;
+                        winnerLeftMost = knots[i][j]; 
+                    }
+                }
+            }
+        }
+        return winnerLeftMost;
+    }
 }

@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Tabs, Tab } from 'react-bootstrap';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
 
 import EmbarkJS from 'Embark/EmbarkJS';
-import Blockchain from './components/blockchain';
-import Whisper from './components/whisper';
-import Storage from './components/storage';
-import Signin from './components/signin';
-
-import './dapp.css';
+import SimpleStorage from 'Embark/contracts/SimpleStorage';
+import Blockies from './components/blockies';
 
 class App extends React.Component {
 
@@ -16,60 +18,69 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      whisperEnabled: false,
-      storageEnabled: false
+      tab: 0,
+      address: '',
+      joined: false,
+      logs: []
     }
+
+    this.handleChangeTab = this.handleChangeTab.bind(this);
   }
 
-  componentDidMount(){ 
+  componentDidMount(){
     EmbarkJS.onReady(() => {
-      if (EmbarkJS.isNewWeb3()) {
-        EmbarkJS.Messages.Providers.whisper.getWhisperVersion((err, version) => { 
-          if(!err)
-              this.setState({whisperEnabled: true})
-            else
-              console.log(err);
-        });
-      } else {
-        if (EmbarkJS.Messages.providerName === 'whisper') {
-          EmbarkJS.Messages.getWhisperVersion((err, version) => {
-            if(!err)
-              this.setState({whisperEnabled: true})
-            else
-              console.log(err);
-          });
-        }
-      }
-
-      this.setState({
-        storageEnabled: true
-      });
+      this.getInfo(web3.eth.defaultAccount);
     });
   }
 
+  handleChangeTab(event, value) {
+    this.setState({ tab: value });
+  }
 
-  _renderStatus(title, available){
-    let className = available ? 'pull-right status-online' : 'pull-right status-offline';
-    return <React.Fragment>
-      {title} 
-      <span className={className}></span>
-    </React.Fragment>;
+  getInfo(address) {
+    SimpleStorage.methods.playerInfo(address).call()
+    .then(_value => {
+      this.setState({
+        address: address,
+        joined: _value.joined != 0,
+        logs: [
+        "SimpleStorage.methods.playerInfo()",
+        "Account: " + this.state.address,
+        "Join: " + _value.joined,
+        "Knot: " + _value.knot,
+        "Left: " + _value.left,
+        "Right: " + _value.right,
+        "Len: " + _value.length
+      ]});
+    })
   }
 
   render(){
-    return (<div><h3>Embark - Usage Example</h3>
-      <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-        <Tab eventKey={1} title="Blockchain">
-          <Blockchain />
-        </Tab>
-        <Tab eventKey={2} title={this._renderStatus('Decentralized Storage', this.state.storageEnabled)}>
-          <Storage enabled={this.state.storageEnabled} />
-        </Tab>
-        <Tab eventKey={3} title={this._renderStatus('P2P communication (Whisper/Orbit)', this.state.whisperEnabled)}>
-          <Whisper enabled={this.state.whisperEnabled} />
-        </Tab>
-      </Tabs>
-    </div>);
+    return (<React.Fragment>
+      <CssBaseline />
+      <Grid container justify="center">
+        <Grid item xs={6} md={4}>
+          <Paper>
+            <Blockies address={this.state.address} />
+            <AppBar position="static" color="default">
+              <Tabs
+                value={this.state.tab}
+                onChange={this.handleChangeTab}
+                indicatorColor="primary"
+                textColor="primary"
+                fullWidth
+              >
+                <Tab label="Left" />
+                <Tab label="Right" />
+              </Tabs>
+            </AppBar>
+            
+          </Paper>
+        </Grid>
+      </Grid>
+      <h3>{this.state.address}</h3>
+      <p>{this.state.joined ? "joined" : "no"}</p>   
+    </React.Fragment>);
   }
 }
 
