@@ -24,7 +24,6 @@ class JointDialog extends React.Component {
     super(props);
 
     this.state = {
-      number: this.props.number,
       jointed: this.props.jointed,
       selected: this.props.jointed,
       open: false,
@@ -43,13 +42,10 @@ class JointDialog extends React.Component {
     if (nextProps.jointed !== this.state.jointed) {
       this.setState({ jointed: nextProps.jointed });
     }
-    if (nextProps.number !== this.state.number) {
-      this.setState({ number: nextProps.number });
-    }
   }
 
   handleOpen(){
-    SimpleStorage.methods.knotsByNumber(this.state.number).call()
+    SimpleStorage.methods.knotsByNumber(this.props.number).call()
       .then(_value => {
         this.setState({ open: true, list: _value});
       })

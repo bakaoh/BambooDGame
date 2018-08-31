@@ -460,6 +460,34 @@
       "0x1e81323b222834288ecf532859b32255d6301aece57160a8effe35c0a357138e": {
         "name": "SimpleStorage",
         "address": "0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF"
+      },
+      "0xb60750e820f08b03fe131584c992081d831a5c910efa05e8910703fdbbf036d5": {
+        "name": "SimpleStorage",
+        "address": "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F"
+      },
+      "0xd56846636c8327fa18f4540a073a4d105b91611b7bf8bf6ca8de0cf15f30b871": {
+        "name": "SimpleStorage",
+        "address": "0x9FBDa871d559710256a2502A2517b794B482Db40"
+      },
+      "0x85b25a044427af23347965ed61c15a42e20479dec7b2c0bc08b4f65a0dcd64b8": {
+        "name": "SimpleStorage",
+        "address": "0xFB88dE099e13c3ED21F80a7a1E49f8CAEcF10df6"
+      }
+    }
+  },
+  "0xad40fe5050d9d174d6a45746fb8f0452ca951b9cdc6c1f271e86aebbda293cb5": {
+    "contracts": {
+      "0x85b25a044427af23347965ed61c15a42e20479dec7b2c0bc08b4f65a0dcd64b8": {
+        "name": "SimpleStorage",
+        "address": "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0"
+      },
+      "0x7ec08a79c6dfd97bdd83c3b1b9f420ee765fd857966506c7f975ebfd25c234d5": {
+        "name": "SimpleStorage",
+        "address": "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da"
+      },
+      "0x2173a0cc0a9a6c9425ebca2781246a17e612786f2732f96b38d970d959871169": {
+        "name": "SimpleStorage",
+        "address": "0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF"
       }
     }
   }

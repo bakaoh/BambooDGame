@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 
 contract SimpleStorage {
 
-    uint constant public MAX_LEN = 16;    
+    uint constant public MAX_LEN = 8;    
     mapping(address => address) private prev;
     mapping(address => address) private next;
     mapping(address => uint) private ts;
@@ -17,14 +17,13 @@ contract SimpleStorage {
         gm = msg.sender;
     }
 
-    // Test
-    function addDummy(address[] _addrs) public {
+    // For test only
+    function addDummy(address[] _addrs) gameMaster public {
         for (uint i = 0; i < _addrs.length; i++) {
             knots[knotNumber(_addrs[i])].push(_addrs[i]);
             prev[_addrs[i]] = gm;
         }
     }
-
     //
 
     modifier ongoing() {
@@ -66,7 +65,14 @@ contract SimpleStorage {
     }
 
     // get info functions
-    function playerInfo(address _addr) public view returns (bool joined, uint knot, address left, address right, uint length) {
+    function gameInfo() public view returns (uint maxLength, bool stopped) {
+        maxLength = MAX_LEN;
+        stopped = ended;
+    }
+
+    function playerInfo(address _addr) public view returns (bool joined, bool master, uint knot, address left, address right, uint length) {
+        master = (gm == msg.sender);
+        if (master) return;
         joined = isPlayer(_addr);
         if (!joined) return;
         knot = knotNumber(_addr);
