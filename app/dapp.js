@@ -25,7 +25,6 @@ import Button from '@material-ui/core/Button';
 import EmbarkJS from 'Embark/EmbarkJS';
 import SimpleStorage from 'Embark/contracts/SimpleStorage';
 import Blockies from './components/blockies';
-import Blockchain from './components/blockchain';
 import JointDialog from './components/jointDialog';
 
 class App extends React.Component {
@@ -142,7 +141,6 @@ class App extends React.Component {
             </Paper>}
         </Grid>
       </Grid>
-      <Blockchain/>
     </React.Fragment>);
   }
 }

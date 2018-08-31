@@ -1,20 +1,15 @@
 {
-  "name": "app_name",
-  "version": "0.0.1",
-  "description": "",
+  "name": "BambooDGame",
+  "version": "1.0.0",
+  "description": "A social decentralized game",
   "main": "Gruntfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "homepage": "",
+  "author": "Bakaoh",
+  "homepage": "https://github.com/bakaoh/BambooDGame",
   "dependencies": {
     "@material-ui/core": "^1.5.1",
     "@material-ui/icons": "^2.0.3",
     "blockies-identicon": "^0.1.0",
     "react": "16.3.2",
-    "react-bootstrap": "0.32.1",
     "react-dom": "16.3.2"
   }
 }

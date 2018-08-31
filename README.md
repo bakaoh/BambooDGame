@@ -34,11 +34,17 @@ Current implementation there till is game master role to setup the game, but som
 
     Prize distribution is currently not built-in.
 
+## TODO
+
+- Upload avatar / set username feature to help player find others easier.
+
+- Better UI/UX.
+
 ## Installation
 
 ```bash
-$ git clone
-$ cd 
+$ git clone https://github.com/bakaoh/BambooDGame.git
+$ cd BambooDGame
 $ embark run
 ```
 
